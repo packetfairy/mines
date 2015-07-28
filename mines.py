@@ -18,14 +18,48 @@ def setmines(length, width, setmines):
     for m in range(0, setmines):
         mines.append(getrandnum(totalspaces, mines))
     count = 0
+    long = 0
+    mines_at = {}
+    for l in range(0, length):
+        wide = 0
+        for w in range(0, width):
+            count += 1
+            if count in mines:
+                try:
+                    mines_at[long][wide] = True
+                except KeyError:
+                    mines_at[long] = {}
+                    mines_at[long][wide] = True
+            else:
+                try:
+                    mines_at[long][wide] = False
+                except KeyError:
+                    mines_at[long] = {}
+                    mines_at[long][wide] = False
+            wide += 1
+        long += 1
+    return(mines_at)
+
+
+def draw_board(length, width, mines_at):
     for l in range(0, length):
         for w in range(0, width):
-            if count in mines:
+            if mines_at[l][w] == True:
                 print '*',
             else:
-                print '.',
-            count += 1
-        print ''
+                nearby_count = 0
+                for checklong in l, l-1, l+1:
+                    for checkwide in w, w-1, w+1:
+                        try:
+                            if mines_at[checklong][checkwide] == True:
+                                nearby_count += 1
+                        except KeyError:
+                            pass
+                if nearby_count == 0:
+                    print '.',
+                else:
+                    print nearby_count,
+        print
 
 
 def main():
@@ -43,7 +77,10 @@ def main():
         options.width = raw_input('enter board width: ')
     if not options.setmines:
         options.setmines = raw_input('enter number of mines: ')
-    setmines(int(options.length), int(options.width), int(options.setmines))
+    mines_at = setmines(int(options.length),
+                        int(options.width),
+                        int(options.setmines))
+    draw_board(int(options.length), int(options.width), mines_at)
 
 
 if __name__ == '__main__':
