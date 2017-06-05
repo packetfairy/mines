@@ -44,14 +44,14 @@ def setmines(length, width, setmines):
 def draw_board(length, width, mines_at):
     for l in range(0, length):
         for w in range(0, width):
-            if mines_at[l][w] == True:
+            if mines_at[l][w] is True:
                 print '*',
             else:
                 nearby_count = 0
                 for checklong in l, l-1, l+1:
                     for checkwide in w, w-1, w+1:
                         try:
-                            if mines_at[checklong][checkwide] == True:
+                            if mines_at[checklong][checkwide] is True:
                                 nearby_count += 1
                         except KeyError:
                             pass
